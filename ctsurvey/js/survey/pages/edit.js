@@ -5,7 +5,12 @@ CT.require("survey.core");
 
 CT.onload(function() {
 	CT.initCore();
-	CT.db.get("survey", function(data) {
-		CT.dom.setContent("ctmain", survey.core.editor(data));
-	});
+	(new CT.modal.Prompt({
+		transition: "slide",
+		style: "password",
+		noClose: true,
+		cb: function(pw) {
+			survey.core.init(pw);
+		}
+	})).show();
 });
