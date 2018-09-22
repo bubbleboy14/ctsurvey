@@ -51,15 +51,19 @@ survey.core = {
 			], "main")
 		];
 	},
-	save: function(obj) {
+	save: function(obj, cb) {
 		CT.net.post({
 			path: "/_db",
 			params: {
 				action: "edit",
 				pw: survey.core._.pw,
 				data: obj
-			}
+			},
+			cb: cb
 		});
+	},
+	setKey: function(data) {
+		survey.core._.cursor.key = data.key;
 	},
 	page: function(page) {
 		var _ = survey.core._, qfield = function(val, opts) {
@@ -73,11 +77,25 @@ survey.core = {
 				qz.appendChild(qfield(val, { isTA: true }));
 			}
 		}), title = qfield(_.cursur.title, {
-				blurs: ["what's the title?", "what do you call this survey?", "survey title?"]
+				blurs: ["what's the title?", "what do you call this survey?", "survey title?"],
+				cb: function(val) {
+					_.cursur.title = val;
+					survey.core.save({
+						key: _.cursur.key,
+						title: val
+					}, survey.core.setKey);
+				}
 			}),
 			blurb = qfield(_.cursur.blurb, {
 				isTA: true,
-				blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"]
+				blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"],
+				cb: function(val) {
+					_.cursur.blurb = val;
+					survey.core.save({
+						key: _.cursur.key,
+						blurb: val
+					}, survey.core.setKey);
+				}
 			});
 		CT.dom.setContent(_.info, [title, blurb]);
 		CT.dom.setContent(_.questions, [qz, newq]);
