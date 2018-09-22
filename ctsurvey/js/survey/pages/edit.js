@@ -1,5 +1,6 @@
 CT.require("CT.all");
 CT.require("core");
+CT.require("user.core");
 CT.require("survey.core");
 
 CT.onload(function() {
