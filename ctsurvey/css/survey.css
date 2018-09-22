@@ -1,0 +1,21 @@
+.surveys {
+	float: right;
+	width: 200px;
+}
+
+.surveys a {
+	display: block;
+}
+
+.pages a {
+	padding: 32px;
+}
+
+.page .images {
+	float: right;
+	width: 50%;
+}
+
+.page .questions {
+	width: 50%;
+}
