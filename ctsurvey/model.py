@@ -13,7 +13,7 @@ class Page(db.TimeStampedBase):
 
 class Answer(db.TimeStampedBase):
     page = db.ForeignKey(kind=Page)
-    question = db.Interger()
+    question = db.Integer()
     name = db.String()  # optional
     email = db.String() # optional
     response = db.Text()
