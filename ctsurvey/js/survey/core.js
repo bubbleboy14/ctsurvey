@@ -20,14 +20,15 @@ survey.core = {
 		questions: CT.dom.div(null, "questions")
 	},
 	editor: function(data) {
-		var _ = survey.core._;
+		var _ = survey.core._, newsurv = CT.dom.link("new survey", function() {
+			survey.core.edit(CT.merge({
+				user: user.core.get("key")
+			}, _.blanks.survey));
+		});
+		newsurv.onclick();
 		return [
 			CT.dom.div([
-				CT.dom.link("new survey", function() {
-					survey.core.edit(CT.merge({
-						user: user.core.get("key")
-					}, _.blanks.survey));
-				}),
+				newsurv,
 				data.map(function(d) {
 					return CT.dom.link(d.title, function() {
 						survey.core.edit(d);
