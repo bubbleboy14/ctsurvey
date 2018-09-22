@@ -50,9 +50,10 @@ survey.core = {
 			return CT.dom.smartField(CT.merge({
 				value: val
 			}, opts, _.blanks.question));
-		}, qz = page.questions.map(qfield), newq = qfield("", {
+		}, qz = CT.dom.div(page.questions.map(qfield)), newq = qfield("", {
 			isTa: true,
 			cb: function(val) {
+				newq.value = "";
 				qz.appendChild(qfield(val, { isTA: true }));
 			}
 		}), title = qfield(_.cursur.title, {
