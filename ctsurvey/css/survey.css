@@ -15,9 +15,17 @@
 	padding: 32px;
 }
 
+.page .images:before {
+	content: "images";
+}
+
 .page .images {
 	float: right;
-	width: 50%;
+	width: 48%;
+}
+
+.page .questions:before {
+	content: "questions";
 }
 
 .page .questions {
