@@ -73,7 +73,7 @@ survey.core = {
 	qfield: function(val, opts) {
 		return CT.dom.smartField(CT.merge({
 			value: val
-		}, opts, _.blanks.question));
+		}, opts, survey.core._.blanks.question));
 	},
 	page: function(page) {
 		var _ = survey.core._, qfield = survey.core.qfield, newq = qfield("", {
