@@ -7,6 +7,10 @@
 	display: block;
 }
 
+.main {
+	width: calc(100% - 200px);
+}
+
 .pages a {
 	padding: 32px;
 }
