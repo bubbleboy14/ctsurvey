@@ -19,6 +19,12 @@ survey.core = {
 		images: CT.dom.div(null, "images"),
 		questions: CT.dom.div(null, "questions")
 	},
+	init: function(pw) {
+		survey.core._.pw = pw;
+		CT.db.get("survey", function(data) {
+			CT.dom.setContent("ctmain", survey.core.editor(data));
+		});
+	},
 	editor: function(data) {
 		var _ = survey.core._, newsurv = CT.dom.link("new survey", function() {
 			survey.core.edit(CT.merge({
@@ -45,14 +51,23 @@ survey.core = {
 			], "main")
 		];
 	},
-	//"smartField": function(cb, classname, id, value, type, blurs, isTA) {
+	save: function(obj) {
+		CT.net.post({
+			path: "/_db",
+			params: {
+				action: "edit",
+				pw: survey.core._.pw,
+				data: obj
+			}
+		});
+	},
 	page: function(page) {
 		var _ = survey.core._, qfield = function(val, opts) {
 			return CT.dom.smartField(CT.merge({
 				value: val
 			}, opts, _.blanks.question));
 		}, qz = CT.dom.div(page.questions.map(qfield)), newq = qfield("", {
-			isTa: true,
+			isTA: true,
 			cb: function(val) {
 				newq.value = "";
 				qz.appendChild(qfield(val, { isTA: true }));
@@ -61,6 +76,7 @@ survey.core = {
 				blurs: ["what's the title?", "what do you call this survey?", "survey title?"]
 			}),
 			blurb = qfield(_.cursur.blurb, {
+				isTA: true,
 				blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"]
 			});
 		CT.dom.setContent(_.info, [title, blurb]);
