@@ -63,63 +63,65 @@ survey.core = {
 		});
 	},
 	setKey: function(data) {
-		survey.core._.cursor.key = data.key;
+		if (!survey.core._.cursor.key) {
+			survey.core._.cursor.key = data.key;
+			survey.core.pages([CT.merge({
+				survey: _.cursur.key
+			}, _.blanks.page)]);
+		}
+	},
+	qfield: function(val, opts) {
+		return CT.dom.smartField(CT.merge({
+			value: val
+		}, opts, _.blanks.question));
 	},
 	page: function(page) {
-		var _ = survey.core._, qfield = function(val, opts) {
-			return CT.dom.smartField(CT.merge({
-				value: val
-			}, opts, _.blanks.question));
-		}, qz = CT.dom.div(page.questions.map(qfield)), newq = qfield("", {
+		var _ = survey.core._, qfield = survey.core.qfield, newq = qfield("", {
 			isTA: true,
 			cb: function(val) {
 				newq.value = "";
 				qz.appendChild(qfield(val, { isTA: true }));
 			}
-		}), title = qfield(_.cursur.title, {
-				blurs: ["what's the title?", "what do you call this survey?", "survey title?"],
-				cb: function(val) {
-					_.cursur.title = val;
-					survey.core.save({
-						key: _.cursur.key,
-						title: val
-					}, survey.core.setKey);
-				}
-			}),
-			blurb = qfield(_.cursur.blurb, {
-				isTA: true,
-				blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"],
-				cb: function(val) {
-					_.cursur.blurb = val;
-					survey.core.save({
-						key: _.cursur.key,
-						blurb: val
-					}, survey.core.setKey);
-				}
-			});
-		CT.dom.setContent(_.info, [title, blurb]);
+		}), qz = CT.dom.div(page.questions.map(qfield));
+
 		CT.dom.setContent(_.questions, [qz, newq]);
 		CT.dom.setContent(_.images, page.images.map(CT.dom.img));
 	},
 	pages: function(pages) {
-		var _ = survey.core._;
-		if (!pages.length) {
-			pages.push(CT.merge({
-				survey: _.cursur.key
-			}, _.blanks.page));
-		}
-		CT.dom.setContent(_.pages, pages.map(function(p, i) {
+		CT.dom.setContent(survey.core._.pages, pages.map(function(p, i) {
 			return CT.dom.link(i + 1, function() {
 				survey.core.page(p);
 			});
 		}));
 		survey.core.page(pages[0]);
 	},
+	info: function() {
+		var _ = survey.core._, qfield = survey.core.qfield, title = qfield(_.cursur.title, {
+			blurs: ["what's the title?", "what do you call this survey?", "survey title?"],
+			cb: function(val) {
+				_.cursur.title = val;
+				survey.core.save({
+					key: _.cursur.key,
+					title: val
+				}, survey.core.setKey);
+			}
+		}), blurb = qfield(_.cursur.blurb, {
+			isTA: true,
+			blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"],
+			cb: function(val) {
+				_.cursur.blurb = val;
+				survey.core.save({
+					key: _.cursur.key,
+					blurb: val
+				}, survey.core.setKey);
+			}
+		});
+		CT.dom.setContent(_.info, [title, blurb]);
+	},
 	edit: function(item) { // TODO: cache this....
 		survey.core._.cursur = item;
-		if (!item.key) // new survey
-			survey.core.pages([]);
-		else CT.db.get("page", survey.core.pages, null, null, null, {
+		survey.core.info();
+		item.key && CT.db.get("page", survey.core.pages, null, null, null, {
 			survey: item.key
 		});
 	}
