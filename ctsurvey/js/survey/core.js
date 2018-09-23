@@ -98,6 +98,12 @@ survey.core = {
 		CT.dom.setContent(_.images, page.images.map(CT.dom.img));
 	},
 	pages: function(pages) {
+		var _ = survey.core._;
+		if (!pages.length) {
+			pages.push(CT.merge({
+				survey: _.cursur.key
+			}, _.blanks.page));
+		}
 		CT.dom.setContent(survey.core._.pages, pages.map(function(p, i) {
 			return CT.dom.link(i + 1, function() {
 				survey.core.page(p);
