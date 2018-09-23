@@ -63,8 +63,8 @@ survey.core = {
 		});
 	},
 	setKey: function(data) {
-		if (!survey.core._.cursor.key) {
-			survey.core._.cursor.key = data.key;
+		if (!survey.core._.cursur.key) {
+			survey.core._.cursur.key = data.key;
 			survey.core.pages([CT.merge({
 				survey: _.cursur.key
 			}, _.blanks.page)]);
@@ -102,6 +102,7 @@ survey.core = {
 				_.cursur.title = val;
 				survey.core.save({
 					key: _.cursur.key,
+					modelName: "survey",
 					title: val
 				}, survey.core.setKey);
 			}
@@ -112,6 +113,7 @@ survey.core = {
 				_.cursur.blurb = val;
 				survey.core.save({
 					key: _.cursur.key,
+					modelName: "survey",
 					blurb: val
 				}, survey.core.setKey);
 			}
