@@ -126,6 +126,8 @@ survey.core = {
 			isTA: true,
 			blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"],
 			cb: function(val) {
+				if (!_.cursur.title)
+					return alert("don't forget the title!");
 				_.cursur.blurb = val;
 				survey.core.save({
 					key: _.cursur.key,
