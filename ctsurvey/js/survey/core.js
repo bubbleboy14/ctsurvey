@@ -17,6 +17,7 @@ survey.core = {
 		info: CT.dom.div(null, "info"),
 		pages: CT.dom.div(null, "pages"),
 		images: CT.dom.div(null, "images"),
+		surveys: CT.dom.div(null, "surveys"),
 		questions: CT.dom.div(null, "questions")
 	},
 	init: function(pw) {
@@ -32,15 +33,16 @@ survey.core = {
 			}, _.blanks.survey));
 		});
 		newsurv.onclick();
+		CT.dom.setContent(_.surveys, [
+			newsurv,
+			data.map(function(d) {
+				return CT.dom.link(d.title, function() {
+					survey.core.edit(d);
+				});
+			})
+		]);
 		return [
-			CT.dom.div([
-				newsurv,
-				data.map(function(d) {
-					return CT.dom.link(d.title, function() {
-						survey.core.edit(d);
-					});
-				})
-			], "surveys"),
+			_.surveys,
 			CT.dom.div([
 				survey.core._.pages,
 				CT.dom.div([
@@ -63,11 +65,15 @@ survey.core = {
 		});
 	},
 	setKey: function(data) {
-		if (!survey.core._.cursur.key) {
-			survey.core._.cursur.key = data.key;
+		var _ = survey.core._;
+		if (!_.cursur.key) {
+			_.cursur.key = data.key;
 			survey.core.pages([CT.merge({
 				survey: _.cursur.key
 			}, _.blanks.page)]);
+			_.surveys.lastElementChild.appendChild(CT.dom.link(data.title, function() {
+				survey.core.edit(data);
+			}));
 		}
 	},
 	qfield: function(val, opts) {
