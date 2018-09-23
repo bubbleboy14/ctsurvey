@@ -31,14 +31,17 @@ survey.core = {
 			survey.core.edit(CT.merge({
 				user: user.core.get("key")
 			}, _.blanks.survey));
+			survey.core.setActive(newsurv);
 		});
 		newsurv.onclick();
 		CT.dom.setContent(_.surveys, [
 			newsurv,
 			data.map(function(d) {
-				return CT.dom.link(d.title, function() {
+				var slink = CT.dom.link(d.title, function() {
 					survey.core.edit(d);
+					survey.core.setActive(slink);
 				});
+				return slink;
 			})
 		]);
 		return [
@@ -71,9 +74,11 @@ survey.core = {
 			survey.core.pages([CT.merge({
 				survey: _.cursur.key
 			}, _.blanks.page)]);
-			_.surveys.lastElementChild.appendChild(CT.dom.link(data.title, function() {
+			var slink = CT.dom.link(data.title, function() {
 				survey.core.edit(data);
-			}));
+				survey.core.setActive(slink);
+			});
+			_.surveys.lastElementChild.appendChild(slink);
 		}
 	},
 	qfield: function(val, opts) {
@@ -89,7 +94,6 @@ survey.core = {
 				qz.appendChild(qfield(val, { isTA: true }));
 			}
 		}), qz = CT.dom.div(page.questions.map(qfield));
-
 		CT.dom.setContent(_.questions, [qz, newq]);
 		CT.dom.setContent(_.images, page.images.map(CT.dom.img));
 	},
@@ -125,6 +129,12 @@ survey.core = {
 			}
 		});
 		CT.dom.setContent(_.info, [title, blurb]);
+	},
+	setActive: function(slink) {
+		var _ = survey.core._, cur = CT.dom.className("active", _.surveys);
+		if (cur.length)
+			cur[0].classList.remove("active");
+		slink.classList.add("active");
 	},
 	edit: function(item) { // TODO: cache this....
 		survey.core._.cursur = item;
