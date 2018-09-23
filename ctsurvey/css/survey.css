@@ -11,6 +11,10 @@
 	display: block;
 }
 
+.surveys a.active {
+	font-weight: bold;
+}
+
 .main {
 	width: calc(100% - 210px);
 }
