@@ -1,3 +1,7 @@
+#ctmain * {
+	box-sizing: border-box;
+}
+
 .surveys {
 	float: right;
 	width: 200px;
@@ -8,7 +12,7 @@
 }
 
 .main {
-	width: calc(100% - 200px);
+	width: calc(100% - 210px);
 }
 
 .pages a {
