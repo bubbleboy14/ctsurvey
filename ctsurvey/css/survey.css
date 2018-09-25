@@ -38,9 +38,11 @@
 
 .dropper {
 	text-align: center;
+	border: 2px solid black;
 }
 
 .dropper label {
+	height: 0px;
 	display: block;
 }
 
