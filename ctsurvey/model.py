@@ -2,7 +2,7 @@ from ctuser.model import CTUser
 from cantools import db
 
 class Demographic(db.TimeStampedBase):
-    prompt = db.String()
+    prompt = db.Text()
     options = db.String(repeated=True)
 
 class Survey(db.TimeStampedBase):
