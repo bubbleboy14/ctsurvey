@@ -173,6 +173,8 @@ survey.core = {
 			}
 		}, true), qz = CT.dom.div(page.questions.map(qfield));
 		_.cur.page = page;
+		CT.dom.show(_.images);
+		CT.dom.show(_.questions);
 		CT.dom.setContent(_.questions, [qz, newq]);
 		survey.core.images();
 	},
@@ -238,10 +240,17 @@ survey.core = {
 		slink.classList.add("active");
 	},
 	edit: function(item) { // TODO: cache this....
-		survey.core._.cur.survey = item;
+		var _ = survey.core._;
+		_.cur.survey = item;
 		survey.core.info();
-		item.key && CT.db.get("page", survey.core.pages, null, null, null, {
-			survey: item.key
-		});
+		if (item.key) {
+			CT.db.get("page", survey.core.pages, null, null, null, {
+				survey: item.key
+			});
+		} else {
+			CT.dom.hide(_.images);
+			CT.dom.hide(_.questions);
+			CT.dom.clear(_.pages.firstChild);
+		}
 	}
 };
