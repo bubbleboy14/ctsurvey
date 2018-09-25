@@ -111,7 +111,7 @@ survey.core = {
 		var _ = survey.core._, page = _.cur.page;
 		CT.db.multi(page.images, function(imgz) {
 			_.cur.images = imgz;
-			var inode = CT.dom.div(page.images.map(survey.core.img));
+			var inode = CT.dom.div(imgz.map(survey.core.img));
 			CT.dom.setContent(_.images, [
 				inode,
 				CT.file.dragdrop(function(ctfile) {
