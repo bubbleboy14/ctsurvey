@@ -1,5 +1,6 @@
 survey.core = {
 	_: {
+		cur: {},
 		blanks: {
 			survey: {
 				title: "",
@@ -71,11 +72,11 @@ survey.core = {
 		});
 	},
 	setKey: function(data) {
-		var _ = survey.core._;
-		if (!_.cursur.key) {
-			_.cursur.key = data.key;
+		var _ = survey.core._, sur = _.cur.survey;
+		if (!sur.key) {
+			sur.key = data.key;
 			survey.core.pages([CT.merge({
-				survey: _.cursur.key
+				survey: sur.key
 			}, _.blanks.page)]);
 			var slink = CT.dom.link(data.title, function() {
 				survey.core.edit(data);
@@ -89,7 +90,7 @@ survey.core = {
 			var num = opts;
 			opts = {
 				cb: function(val) {
-					var page = survey.core._.curpage;
+					var page = survey.core._.cur.page;
 					page.questions[num] = val;
 					survey.core.save({
 						key: page.key,
@@ -102,6 +103,13 @@ survey.core = {
 			isTA: ta,
 			value: val
 		}, opts, survey.core._.blanks.question));
+	},
+	images: function() {
+		var _ = survey.core._, page = _.cur.page;
+		CT.db.multi(page.images, function(imgz) {
+			pages.images = imgz;
+			CT.dom.setContent(_.images, page.images.map(CT.dom.img));
+		});
 	},
 	page: function(page) {
 		var _ = survey.core._, qfield = survey.core.qfield, newq = qfield("", {
@@ -120,13 +128,13 @@ survey.core = {
 				});
 			}
 		}, true), qz = CT.dom.div(page.questions.map(qfield));
-		_.curpage = page;
+		_.cur.page = page;
 		CT.dom.setContent(_.questions, [qz, newq]);
-		CT.dom.setContent(_.images, page.images.map(CT.dom.img));
+		survey.core.images();
 	},
 	newPage: function() {
-		var _ = survey.core._, pages = _.curpages, page = CT.merge({
-			survey: _.cursur.key
+		var _ = survey.core._, pages = _.cur.pages, page = CT.merge({
+			survey: _.cur.survey.key
 		}, _.blanks.page), viewPage = function() {
 			survey.core.setActive(slink, _.pages.firstChild);
 			survey.core.page(page);
@@ -138,7 +146,7 @@ survey.core = {
 	},
 	pages: function(pages) {
 		var _ = survey.core._;
-		_.curpages = pages;
+		_.cur.pages = pages;
 		if (!pages.length) {
 			CT.dom.clear(_.pages.firstChild);
 			return survey.core.newPage();
@@ -154,25 +162,25 @@ survey.core = {
 		CT.dom.show(_.newpage);
 	},
 	info: function() {
-		var _ = survey.core._, qfield = survey.core.qfield, title = qfield(_.cursur.title, {
+		var _ = survey.core._, sur = _.cur.survey, qfield = survey.core.qfield, title = qfield(sur.title, {
 			blurs: ["what's the title?", "what do you call this survey?", "survey title?"],
 			cb: function(val) {
-				_.cursur.title = val;
+				sur.title = val;
 				survey.core.save({
-					key: _.cursur.key,
-					user: _.cursur.user,
+					key: sur.key,
+					user: sur.user,
 					modelName: "survey",
 					title: val
 				}, survey.core.setKey);
 			}
-		}), blurb = qfield(_.cursur.blurb, {
+		}), blurb = qfield(_.cur.survey.blurb, {
 			blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"],
 			cb: function(val) {
-				if (!_.cursur.title)
+				if (!sur.title)
 					return alert("don't forget the title!");
-				_.cursur.blurb = val;
+				sur.blurb = val;
 				survey.core.save({
-					key: _.cursur.key,
+					key: sur.key,
 					blurb: val
 				}, survey.core.setKey);
 			}
@@ -186,7 +194,7 @@ survey.core = {
 		slink.classList.add("active");
 	},
 	edit: function(item) { // TODO: cache this....
-		survey.core._.cursur = item;
+		survey.core._.cur.survey = item;
 		survey.core.info();
 		item.key && CT.db.get("page", survey.core.pages, null, null, null, {
 			survey: item.key
