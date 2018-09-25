@@ -81,17 +81,30 @@ survey.core = {
 			_.surveys.lastElementChild.appendChild(slink);
 		}
 	},
-	qfield: function(val, opts) {
+	qfield: function(val, opts, ta) {
+		if (typeof opts == "number") {
+			var num = opts;
+			opts = {
+				cb: function(val) {
+					var page = survey.core._.curpage;
+					page.questions[num] = val;
+					survey.core.save({
+						key: page.key,
+						questions: page.questions
+					});
+				}
+			};
+		}
 		return CT.dom.smartField(CT.merge({
+			isTA: ta,
 			value: val
 		}, opts, survey.core._.blanks.question));
 	},
 	page: function(page) {
 		var _ = survey.core._, qfield = survey.core.qfield, newq = qfield("", {
-			isTA: true,
 			cb: function(val) {
 				newq.value = "";
-				qz.appendChild(qfield(val, { isTA: true }));
+				qz.appendChild(qfield(val, page.questions.length, true));
 				page.questions[page.questions.length] = val;
 				survey.core.save({
 					key: page.key,
@@ -102,7 +115,8 @@ survey.core = {
 					page.key = data.key;
 				});
 			}
-		}), qz = CT.dom.div(page.questions.map(qfield));
+		}, true), qz = CT.dom.div(page.questions.map(qfield));
+		_.curpage = page;
 		CT.dom.setContent(_.questions, [qz, newq]);
 		CT.dom.setContent(_.images, page.images.map(CT.dom.img));
 	},
@@ -133,7 +147,6 @@ survey.core = {
 				}, survey.core.setKey);
 			}
 		}), blurb = qfield(_.cursur.blurb, {
-			isTA: true,
 			blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"],
 			cb: function(val) {
 				if (!_.cursur.title)
@@ -144,7 +157,7 @@ survey.core = {
 					blurb: val
 				}, survey.core.setKey);
 			}
-		});
+		}, true);
 		CT.dom.setContent(_.info, [title, blurb]);
 	},
 	setActive: function(slink) {
