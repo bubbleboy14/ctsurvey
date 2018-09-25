@@ -38,6 +38,9 @@
 
 .dropper label {
 	display: block;
+}
+
+.dropper input {
 	height: 100%;
 }
 
