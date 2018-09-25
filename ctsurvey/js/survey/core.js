@@ -120,7 +120,7 @@ survey.core = {
 						prompt: "please enter the reference link",
 						cb: function(val) {
 							survey.core.save({
-								modelType: "image",
+								modelName: "image",
 								link: val
 							}, function(idata) {
 								page.images.push(idata.key);
