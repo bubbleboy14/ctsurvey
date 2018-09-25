@@ -6,6 +6,14 @@ class Survey(db.TimeStampedBase):
     title = db.String()
     blurb = db.Text()
 
+class Demographic(db.TimeStampedBase):
+    prompt = db.String()
+    options = db.String(repeated=True)
+
+class Questionnaire(db.TimeStampedBase):
+    survey = db.ForeignKey(kind=Survey)
+    demographic = db.ForeignKey(kind=Demographic, repeated=True)
+
 class Image(db.TimeStampedBase):
     image = db.Binary()
     link = db.String()
