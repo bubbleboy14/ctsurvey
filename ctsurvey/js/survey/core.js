@@ -29,11 +29,10 @@ survey.core = {
 		newhide: function() {
 			var _ = survey.core._;
 			_.editors.tabs.firstChild.firstChild.onclick();
-			_.editors.tabs.style.width = "150px";
+			_.editors.tabs.firstChild.lastChild.style.display = "none";
 		},
 		newshow: function() {
-			var _ = survey.core._;
-			_.editors.tabs.style.width = "100%";
+			survey.core._.editors.tabs.firstChild.lastChild.style.display = "inline";
 		}
 	},
 	init: function(pw) {
