@@ -12,7 +12,7 @@ class Demographic(db.TimeStampedBase):
 
 class Questionnaire(db.TimeStampedBase):
     survey = db.ForeignKey(kind=Survey)
-    demographic = db.ForeignKey(kind=Demographic, repeated=True)
+    demographics = db.ForeignKey(kind=Demographic, repeated=True)
 
 class Image(db.TimeStampedBase):
     image = db.Binary()
