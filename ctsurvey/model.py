@@ -1,18 +1,15 @@
 from ctuser.model import CTUser
 from cantools import db
 
-class Survey(db.TimeStampedBase):
-    user = db.ForeignKey(kind=CTUser)
-    title = db.String()
-    blurb = db.Text()
-
 class Demographic(db.TimeStampedBase):
     prompt = db.String()
     options = db.String(repeated=True)
 
-class Questionnaire(db.TimeStampedBase):
-    survey = db.ForeignKey(kind=Survey)
+class Survey(db.TimeStampedBase):
+    user = db.ForeignKey(kind=CTUser)
     demographics = db.ForeignKey(kind=Demographic, repeated=True)
+    title = db.String()
+    blurb = db.Text()
 
 class Image(db.TimeStampedBase):
     image = db.Binary()
