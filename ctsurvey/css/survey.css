@@ -20,6 +20,9 @@
 }
 
 .main .section_tabs {
+	width: 100%;
+	overflow: hidden;
+	transition: width 1s;
 	padding-bottom: 10px;
 }
 
