@@ -92,6 +92,15 @@ survey.core = {
 			cb: function(val) {
 				newq.value = "";
 				qz.appendChild(qfield(val, { isTA: true }));
+				page.questions[page.questions.length] = val;
+				survey.core.save({
+					key: page.key,
+					modelName: "page",
+					survey: page.survey,
+					questions: page.questions
+				}, function(data) {
+					page.key = data.key;
+				});
 			}
 		}), qz = CT.dom.div(page.questions.map(qfield));
 		CT.dom.setContent(_.questions, [qz, newq]);
