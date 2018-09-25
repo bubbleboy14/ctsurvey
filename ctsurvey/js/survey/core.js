@@ -29,8 +29,7 @@ survey.core = {
 		newhide: function() {
 			var _ = survey.core._;
 			_.editors.tabs.firstChild.firstChild.onclick();
-			_.editors.tabs.style.width = "130px";
-
+			_.editors.tabs.style.width = "150px";
 		},
 		newshow: function() {
 			var _ = survey.core._;
