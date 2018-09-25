@@ -15,6 +15,11 @@ survey.core = {
 				blurs: ["what's the question?", "question please", "type the question"]
 			}
 		},
+		editors: {
+			page: CT.dom.div(),
+			questionnaire: CT.dom.div(),
+			tabs: CT.dom.div(null, "section_tabs")
+		},
 		info: CT.dom.div(null, "info"),
 		pages: CT.dom.div(CT.dom.div(), "pages"),
 		images: CT.dom.div(null, "images"),
@@ -36,6 +41,7 @@ survey.core = {
 			survey.core.setActive(newsurv);
 		});
 		newsurv.onclick();
+		_.newpage.onclick = survey.core.newPage;
 		CT.dom.setContent(_.surveys, [
 			newsurv,
 			data.map(function(d) {
@@ -46,17 +52,34 @@ survey.core = {
 				return slink;
 			})
 		]);
-		_.newpage.onclick = survey.core.newPage;
+		CT.dom.setContent(_.editors.tabs, ["questionnaire", "page"].map(function(sec, i) {
+			var slink = CT.dom.link(sec, function() {
+				survey.core.setActive(slink, _.editors.tabs);
+				var ispage = sec == "page";
+				CT.dom.show(_.editors[ispage && "page" || "questionnaire"]);
+				CT.dom.hide(_.editors[ispage && "questionnaire" || "page"]);
+			}, null, i || "active");
+			return slink;
+		}));
+		CT.dom.setContent(_.editors.page, [
+			_.newpage,
+			survey.core._.pages,
+			CT.dom.div([
+				_.info,
+				_.images,
+				_.questions
+			], "page")
+		]);
+		CT.dom.setContent(_.editors.questionnaire, [
+			_.info,
+			"other questionnaire stuff!!!"
+		]);
 		return [
 			_.surveys,
 			CT.dom.div([
-				_.newpage,
-				survey.core._.pages,
-				CT.dom.div([
-					_.info,
-					_.images,
-					_.questions
-				], "page")
+				_.editors.tabs,
+				_.editors.page,
+				_.editors.questionnaire
 			], "main")
 		];
 	},
