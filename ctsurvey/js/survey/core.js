@@ -18,7 +18,8 @@ survey.core = {
 		pages: CT.dom.div(null, "pages"),
 		images: CT.dom.div(null, "images"),
 		surveys: CT.dom.div(null, "surveys"),
-		questions: CT.dom.div(null, "questions")
+		questions: CT.dom.div(null, "questions"),
+		newpage: CT.dom.button("new page", null, "right hidden")
 	},
 	init: function(pw) {
 		survey.core._.pw = pw;
@@ -44,9 +45,11 @@ survey.core = {
 				return slink;
 			})
 		]);
+		_.newpage.onclick = survey.core.newPage;
 		return [
 			_.surveys,
 			CT.dom.div([
+				_.newpage,
 				survey.core._.pages,
 				CT.dom.div([
 					_.info,
@@ -106,6 +109,7 @@ survey.core = {
 				newq.value = "";
 				qz.appendChild(qfield(val, page.questions.length, true));
 				page.questions[page.questions.length] = val;
+				CT.dom.show(_.newpage);
 				survey.core.save({
 					key: page.key,
 					modelName: "page",
@@ -120,19 +124,31 @@ survey.core = {
 		CT.dom.setContent(_.questions, [qz, newq]);
 		CT.dom.setContent(_.images, page.images.map(CT.dom.img));
 	},
+	newPage: function() {
+		var _ = survey.core._, pages = _.curpages, page = CT.merge({
+			survey: _.cursur.key
+		}, _.blanks.page), viewPage = function() {
+			survey.core.page(page);
+		};
+		pages.push(page);
+		CT.dom.addContent(_.pages.firstChild, CT.dom.link(pages.length, viewPage));
+		CT.dom.hide(_.newpage);
+		viewPage();
+	},
 	pages: function(pages) {
 		var _ = survey.core._;
+		_.curpages = pages;
 		if (!pages.length) {
-			pages.push(CT.merge({
-				survey: _.cursur.key
-			}, _.blanks.page));
+			CT.dom.clear(_.pages);
+			return survey.core.newPage();
 		}
-		CT.dom.setContent(survey.core._.pages, pages.map(function(p, i) {
+		CT.dom.setContent(_.pages, pages.map(function(p, i) {
 			return CT.dom.link(i + 1, function() {
 				survey.core.page(p);
 			});
 		}));
 		survey.core.page(pages[0]);
+		CT.dom.show(_.newpage);
 	},
 	info: function() {
 		var _ = survey.core._, qfield = survey.core.qfield, title = qfield(_.cursur.title, {
