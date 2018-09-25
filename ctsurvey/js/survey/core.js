@@ -16,7 +16,7 @@ survey.core = {
 			}
 		},
 		info: CT.dom.div(null, "info"),
-		pages: CT.dom.div(null, "pages"),
+		pages: CT.dom.div(CT.dom.div(), "pages"),
 		images: CT.dom.div(null, "images"),
 		surveys: CT.dom.div(null, "surveys"),
 		questions: CT.dom.div(null, "questions"),
@@ -104,11 +104,43 @@ survey.core = {
 			value: val
 		}, opts, survey.core._.blanks.question));
 	},
+	img: function(d) {
+		return CT.dom.img(d.image);
+	},
 	images: function() {
 		var _ = survey.core._, page = _.cur.page;
 		CT.db.multi(page.images, function(imgz) {
-			pages.images = imgz;
-			CT.dom.setContent(_.images, page.images.map(CT.dom.img));
+			_.cur.images = imgz;
+			var inode = CT.dom.div(page.images.map(survey.core.img));
+			CT.dom.setContent(_.images, [
+				CT.file.dragdrop(function(ctfile) {
+					(new CT.modal.Prompt({
+						transition: "slide",
+						prompt: "please enter the reference link",
+						cb: function(val) {
+							survey.core.save({
+								modelType: "image",
+								link: val
+							}, function(idata) {
+								page.images.push(idata.key);
+								survey.core.save({
+									key: page.key,
+									images: page.images
+								});
+								ctfile.upload("/_db", function(url) {
+									idata.image = url;
+									inode.appendChild(survey.core.img(idata));
+								}, {
+									action: "blob",
+									key: idata.key,
+									property: "image"
+								});
+							});
+						}
+					})).show();
+				}),
+				inode
+			]);
 		});
 	},
 	page: function(page) {
