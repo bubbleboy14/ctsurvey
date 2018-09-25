@@ -19,8 +19,20 @@
 	width: calc(100% - 210px);
 }
 
+.main .section_tabs {
+	padding-bottom: 10px;
+}
+
+.main .section_tabs a {
+	margin: 20px;
+}
+
 .pages a {
 	padding: 32px;
+}
+
+.page {
+	clear: both;
 }
 
 .page .images:before {
