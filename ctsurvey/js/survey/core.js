@@ -243,6 +243,7 @@ survey.core = {
 		CT.dom.show(_.newpage);
 	},
 	demo: function(dem) {
+		var doptions = CT.dom.fieldList(dem.options);
 		return CT.dom.div([
 			survey.core.qfield(dem.prompt, {
 				cb: function(val) {
@@ -253,10 +254,19 @@ survey.core = {
 					});
 				}
 			}, true),
-
-//"select": function(onames, ovalues, id, curvalue, defaultvalue, onchange, other) {
-  // no use the other one!!
-//			CT.dom.selector(dem.options, null, null, )
+			[
+				CT.dom.button("update options", function() {
+					dem.options = doptions.value();
+					survey.core.save({
+						key: dem.key,
+						options: dem.options
+					});
+				}, "right"),
+				"options:",
+				doptions.addButton,
+				doptions.empty,
+				doptions
+			]
 		], "topbordered topmargined toppadded");
 	},
 	info: function() {
