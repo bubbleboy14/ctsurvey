@@ -105,12 +105,24 @@ survey.core = {
 		}, opts, survey.core._.blanks.question));
 	},
 	img: function(d) {
-		return CT.dom.img(d.image);
+		var page = survey.core._.cur.page, n = CT.dom.div([
+			CT.dom.link("delete", function() {
+				if (confirm("really?")) {
+					CT.dom.remove(n);
+					CT.data.remove(page.images, d.key);
+					survey.core.save({
+						key: page.key,
+						images: page.images
+					});
+				}
+			}, null, "right"),
+			CT.dom.img(d.image)
+		]);
+		return n;
 	},
 	images: function() {
 		var _ = survey.core._, page = _.cur.page;
 		CT.db.multi(page.images, function(imgz) {
-			_.cur.images = imgz;
 			var inode = CT.dom.div(imgz.map(survey.core.img));
 			CT.dom.setContent(_.images, [
 				inode,
