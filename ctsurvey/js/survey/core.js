@@ -138,7 +138,11 @@ survey.core = {
 								page.images.push(idata.key);
 								survey.core.save({
 									key: page.key,
+									modelName: "page",
+									survey: page.survey,
 									images: page.images
+								}, function(pdata) {
+									page.key = pdata.key;
 								});
 								ctfile.upload("/_db", function(url) {
 									idata.image = url;
