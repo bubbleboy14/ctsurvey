@@ -151,7 +151,7 @@ survey.core = {
 							});
 						}
 					})).show();
-				}, "w1 h80p dropper")
+				})
 			]);
 		});
 	},

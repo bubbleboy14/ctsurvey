@@ -36,24 +36,6 @@
 	width: 100%;
 }
 
-.dropper {
-	text-align: center;
-	border: 2px dashed black;
-}
-
-.dropper label {
-	height: 0px;
-	display: block;
-}
-
-.dropper input {
-	height: 100%;
-}
-
-.dropper:hover {
-	background: grey;
-}
-
 .page .questions:before {
 	content: "questions";
 }
