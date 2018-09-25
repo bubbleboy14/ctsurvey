@@ -25,7 +25,17 @@ survey.core = {
 		images: CT.dom.div(null, "images"),
 		surveys: CT.dom.div(null, "surveys"),
 		questions: CT.dom.div(null, "questions"),
-		newpage: CT.dom.button("new page", null, "right hidden")
+		newpage: CT.dom.button("new page", null, "right hidden"),
+		newhide: function() {
+			var _ = survey.core._;
+			_.editors.tabs.firstChild.firstChild.onclick();
+			_.editors.tabs.style.width = "130px";
+
+		},
+		newshow: function() {
+			var _ = survey.core._;
+			_.editors.tabs.style.width = "100%";
+		}
 	},
 	init: function(pw) {
 		survey.core._.pw = pw;
@@ -40,8 +50,6 @@ survey.core = {
 			}, _.blanks.survey));
 			survey.core.setActive(newsurv);
 		});
-		newsurv.onclick();
-		_.newpage.onclick = survey.core.newPage;
 		CT.dom.setContent(_.surveys, [
 			newsurv,
 			data.map(function(d) {
@@ -73,6 +81,8 @@ survey.core = {
 			_.info,
 			"other questionnaire stuff!!!"
 		]);
+		_.newpage.onclick = survey.core.newPage;
+		newsurv.onclick();
 		return [
 			_.surveys,
 			CT.dom.div([
@@ -200,8 +210,6 @@ survey.core = {
 			}
 		}, true), qz = CT.dom.div(page.questions.map(qfield));
 		_.cur.page = page;
-		CT.dom.show(_.images);
-		CT.dom.show(_.questions);
 		CT.dom.setContent(_.questions, [qz, newq]);
 		survey.core.images();
 	},
@@ -271,12 +279,12 @@ survey.core = {
 		_.cur.survey = item;
 		survey.core.info();
 		if (item.key) {
+			_.newshow();
 			CT.db.get("page", survey.core.pages, null, null, null, {
 				survey: item.key
 			});
 		} else {
-			CT.dom.hide(_.images);
-			CT.dom.hide(_.questions);
+			_.newhide();
 			CT.dom.clear(_.pages.firstChild);
 		}
 	}
