@@ -32,6 +32,10 @@
 	width: 48%;
 }
 
+.page .images img {
+	width: 100%;
+}
+
 .dropper {
 	text-align: center;
 }
