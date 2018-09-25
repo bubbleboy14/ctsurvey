@@ -118,6 +118,7 @@ survey.core = {
 				_.cursur.title = val;
 				survey.core.save({
 					key: _.cursur.key,
+					user: _.cursur.user,
 					modelName: "survey",
 					title: val
 				}, survey.core.setKey);
@@ -131,7 +132,6 @@ survey.core = {
 				_.cursur.blurb = val;
 				survey.core.save({
 					key: _.cursur.key,
-					modelName: "survey",
 					blurb: val
 				}, survey.core.setKey);
 			}
