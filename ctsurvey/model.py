@@ -6,9 +6,13 @@ class Survey(db.TimeStampedBase):
     title = db.String()
     blurb = db.Text()
 
+class Image(db.TimeStampedBase):
+    image = db.Binary()
+    link = db.String()
+
 class Page(db.TimeStampedBase):
     survey = db.ForeignKey(kind=Survey)
-    images = db.Binary(repeated=True)
+    images = db.ForeignKey(kind=Image, repeated=True)
     questions = db.String(repeated=True)
 
 class Answer(db.TimeStampedBase):
