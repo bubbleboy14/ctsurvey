@@ -128,10 +128,11 @@ survey.core = {
 		var _ = survey.core._, pages = _.curpages, page = CT.merge({
 			survey: _.cursur.key
 		}, _.blanks.page), viewPage = function() {
+			survey.core.setActive(slink, _.pages.firstChild);
 			survey.core.page(page);
-		};
+		}, slink = CT.dom.link(pages.length + 1, viewPage);
 		pages.push(page);
-		CT.dom.addContent(_.pages.firstChild, CT.dom.link(pages.length, viewPage));
+		CT.dom.addContent(_.pages.firstChild, slink);
 		CT.dom.hide(_.newpage);
 		viewPage();
 	},
@@ -139,13 +140,15 @@ survey.core = {
 		var _ = survey.core._;
 		_.curpages = pages;
 		if (!pages.length) {
-			CT.dom.clear(_.pages);
+			CT.dom.clear(_.pages.firstChild);
 			return survey.core.newPage();
 		}
 		CT.dom.setContent(_.pages, pages.map(function(p, i) {
-			return CT.dom.link(i + 1, function() {
+			var slink = CT.dom.link(i + 1, function() {
+				survey.core.setActive(slink, _.pages.firstChild);
 				survey.core.page(p);
-			});
+			}, null, i || "active");
+			return slink;
 		}));
 		survey.core.page(pages[0]);
 		CT.dom.show(_.newpage);
@@ -176,8 +179,8 @@ survey.core = {
 		}, true);
 		CT.dom.setContent(_.info, [title, blurb]);
 	},
-	setActive: function(slink) {
-		var _ = survey.core._, cur = CT.dom.className("active", _.surveys);
+	setActive: function(slink, section) {
+		var _ = survey.core._, cur = CT.dom.className("active", section || _.surveys);
 		if (cur.length)
 			cur[0].classList.remove("active");
 		slink.classList.add("active");
