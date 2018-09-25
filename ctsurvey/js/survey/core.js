@@ -65,7 +65,6 @@ survey.core = {
 			_.newpage,
 			survey.core._.pages,
 			CT.dom.div([
-				_.info,
 				_.images,
 				_.questions
 			], "page")
@@ -169,6 +168,7 @@ survey.core = {
 								});
 								ctfile.upload("/_db", function(url) {
 									idata.image = url;
+									CT.dom.show(_.newpage);
 									inode.appendChild(survey.core.img(idata));
 								}, {
 									action: "blob",
