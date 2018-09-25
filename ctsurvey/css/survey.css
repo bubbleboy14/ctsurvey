@@ -32,6 +32,19 @@
 	width: 48%;
 }
 
+.dropper {
+	text-align: center;
+}
+
+.dropper label {
+	display: block;
+	height: 100%;
+}
+
+.dropper:hover {
+	background: grey;
+}
+
 .page .questions:before {
 	content: "questions";
 }
