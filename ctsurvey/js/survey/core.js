@@ -113,6 +113,7 @@ survey.core = {
 			_.cur.images = imgz;
 			var inode = CT.dom.div(page.images.map(survey.core.img));
 			CT.dom.setContent(_.images, [
+				inode,
 				CT.file.dragdrop(function(ctfile) {
 					(new CT.modal.Prompt({
 						transition: "slide",
@@ -138,8 +139,7 @@ survey.core = {
 							});
 						}
 					})).show();
-				}),
-				inode
+				}, "w1 h80p dropper")
 			]);
 		});
 	},
