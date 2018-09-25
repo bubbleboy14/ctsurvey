@@ -4,7 +4,8 @@ survey.core = {
 		blanks: {
 			survey: {
 				title: "",
-				blurb: ""
+				blurb: "",
+				demographics: []
 			},
 			page: {
 				images: [],
@@ -21,6 +22,7 @@ survey.core = {
 			tabs: CT.dom.div(null, "section_tabs")
 		},
 		info: CT.dom.div(null, "info"),
+		demos: CT.dom.div(null, "demos"),
 		pages: CT.dom.div(CT.dom.div(), "pages"),
 		images: CT.dom.div(null, "images"),
 		surveys: CT.dom.div(null, "surveys"),
@@ -77,7 +79,7 @@ survey.core = {
 		]);
 		CT.dom.setContent(_.editors.questionnaire, [
 			_.info,
-			"other questionnaire stuff!!!"
+			_.demos
 		]);
 		_.newpage.onclick = survey.core.newPage;
 		newsurv.onclick();
@@ -240,6 +242,23 @@ survey.core = {
 		survey.core.page(pages[0]);
 		CT.dom.show(_.newpage);
 	},
+	demo: function(dem) {
+		return CT.dom.div([
+			survey.core.qfield(dem.prompt, {
+				cb: function(val) {
+					dem.prompt = val;
+					survey.core.save({
+						key: dem.key,
+						prompt: val
+					});
+				}
+			}, true),
+
+//"select": function(onames, ovalues, id, curvalue, defaultvalue, onchange, other) {
+  // no use the other one!!
+//			CT.dom.selector(dem.options, null, null, )
+		], "topbordered topmargined toppadded");
+	},
 	info: function() {
 		var _ = survey.core._, sur = _.cur.survey, qfield = survey.core.qfield, title = qfield(sur.title, {
 			blurs: ["what's the title?", "what do you call this survey?", "survey title?"],
@@ -265,6 +284,30 @@ survey.core = {
 			}
 		}, true);
 		CT.dom.setContent(_.info, [title, blurb]);
+		CT.db.multi(sur.demographics, function(dz) {
+			CT.dom.setContent(_.demos, [
+				CT.dom.button("new demographic question", function() {
+					(new CT.modal.Prompt({
+						transition: "slide",
+						prompt: "what's the prompt?",
+						cb: function(val) {
+							survey.core.save({
+								modelName: "demographic",
+								prompt: val
+							}, function(demdata) {
+								sur.demographics.push(demdata.key);
+								survey.core.save({
+									key: sur.key,
+									demographics: sur.demographics
+								});
+								_.demos.firstChild.lastChild.appendChild(survey.core.demo(demdata));
+							});
+						}
+					})).show();
+				}, "right"),
+				dz.map(survey.core.demo)
+			]);
+		});
 	},
 	setActive: function(slink, section) {
 		var _ = survey.core._, cur = CT.dom.className("active", section || _.surveys);
