@@ -1,5 +1,6 @@
 {
 	"apikey": null,
+	"timeout": 15,
 	"blurs": {
 		"title": ["what's the title?", "what do you call this survey?", "survey title?"],
 		"blurb": ["what's the blurb?", "describe", "tell me more", "gimme some info"],

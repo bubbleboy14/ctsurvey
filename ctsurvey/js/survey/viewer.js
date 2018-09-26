@@ -63,24 +63,33 @@ survey.viewer = {
 			}, true)
 		];
 	},
-	page: function(page, with_questions) {
+	page: function(page, cb, with_questions) {
 		// add pictures
 		CT.db.multi(page.images, function(imgz) {
-			survey.core.modal(imgz.map(function(img) {
+			var iz = imgz.map(function(img) {
 				return CT.dom.img(img.image);
-			}))
+			}), content = with_questions ? [
+				CT.dom.div(iz, "right w200p"),
+				page.questions.map(question)
+			] : iz, butt = CT.dom.button("continue",
+				null, null, null, !with_questions);
+			var mod = survey.core.modal([
+				content, butt
+			], cb);
+			butt.onclick = mod.hide;
+			mod.show();
+			if (!with_questions) {
+				setTimeout(function() {
+					butt.disabled = false;
+				}, core.config.ctsurvey.timeout * 1000);
+			}
 		});
-
-		if (with_questions) {
-			// add questions
-
-		} else {
-			// set timer to enable button
-			// cycle back after w/ qz
-		}
 	},
 	pages: function(pages, with_questions) {
-
+		var pindex = 0;
+		survey.viewer.page(pages[pindex], function() {
+			
+		}, with_questions);
 	},
 	register: function(cb) {
 		var qf = survey.core.qfield, blurs = core.config.ctsurvey.blurs;
