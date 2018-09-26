@@ -24,6 +24,19 @@ survey.core = {
 		questions: CT.dom.div(null, "questions"),
 		newpage: CT.dom.button("new page", null, "right hidden")
 	},
+	modal: function(content, cb) {
+		var mod = new CT.modal.Modal({
+			transition: "slide",
+			content: content,
+			noClose: true,
+			slide: {
+				origin: "right"
+			}
+		});
+		mod.on.hide = cb;
+		mod.show();
+		return mod;
+	},
 	save: function(obj, cb) {
 		CT.net.post({
 			path: "/_db",

@@ -268,7 +268,7 @@ survey.editor = {
 			]);
 		});
 	},
-	edit: function(item) { // TODO: cache this....
+	edit: function(item) {
 		var _ = survey.editor._;
 		survey.core._.cur.survey = item;
 		survey.editor.info();

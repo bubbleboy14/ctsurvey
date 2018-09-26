@@ -8,19 +8,6 @@ survey.viewer = {
 			survey.viewer.register(survey.viewer.questionnaire);
 		});
 	},
-	modal: function(content, cb) {
-		var mod = new CT.modal.Modal({
-			transition: "slide",
-			content: content,
-			noClose: true,
-			slide: {
-				origin: "right"
-			}
-		});
-		mod.on.hide = cb;
-		mod.show();
-		return mod;
-	},
 	demq: function(d, i) {
 		var surv = survey.core._.cur.survey,
 			demz = core.config.ctsurvey.surveys[surv.title].demographics,
@@ -35,7 +22,7 @@ survey.viewer = {
 		var cur = survey.core._.cur;
 		CT.db.multi(cur.survey.demographics, function(demz) {
 			var qnaire = CT.dom.div(demz.map(survey.viewer.demq));
-			var mod = survey.viewer.modal([
+			var mod = survey.core.modal([
 				qnaire,
 				CT.dom.button("continue", function() {
 					mod.hide();
@@ -53,8 +40,16 @@ survey.viewer = {
 						return val;
 					})
 				}, function() {
-					CT.db.get("page", survey.viewer.pages, null, null, null, {
-						survey: cur.survey.key
+					var intro = survey.core.modal([
+						CT.dom.div(cur.survey.title, "title"),
+						CT.dom.div(cur.survey.blurb, "blurb"),
+						CT.dom.button("continue", function() {
+							intro.hide();
+						})
+					], function() {
+						CT.db.get("page", survey.viewer.pages, null, null, null, {
+							survey: cur.survey.key
+						});
 					});
 				});
 			});
@@ -68,9 +63,13 @@ survey.viewer = {
 			}, true)
 		];
 	},
-	pages: function(pages, with_questions) {
+	page: function(page, with_questions) {
 		// add pictures
-
+		CT.db.multi(page.images, function(imgz) {
+			survey.core.modal(imgz.map(function(img) {
+				return CT.dom.img(img.image);
+			}))
+		});
 
 		if (with_questions) {
 			// add questions
@@ -79,6 +78,9 @@ survey.viewer = {
 			// set timer to enable button
 			// cycle back after w/ qz
 		}
+	},
+	pages: function(pages, with_questions) {
+
 	},
 	register: function(cb) {
 		var qf = survey.core.qfield, blurs = core.config.ctsurvey.blurs;
