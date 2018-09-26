@@ -24,8 +24,8 @@ survey.core = {
 		questions: CT.dom.div(null, "questions"),
 		newpage: CT.dom.button("new page", null, "right hidden")
 	},
-	modal: function(content, cb) {
-		var mod = new CT.modal.Modal({
+	modal: function(content, cb, lightbox) {
+		var mod = new CT.modal[lightbox ? "LightBox" : "Modal"]({
 			transition: "slide",
 			content: content,
 			noClose: true,
