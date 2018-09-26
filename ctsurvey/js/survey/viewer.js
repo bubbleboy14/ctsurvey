@@ -4,6 +4,7 @@ survey.viewer = {
 		CT.db.one(survkey, function(surv) {
 			// load up the survey
 			survey.core._.cur.survey = surv;
+			survey.core._.pw = core.config.ctsurvey.apikey;
 			survey.viewer.register(survey.viewer.questionnaire);
 		});
 	},
@@ -18,6 +19,7 @@ survey.viewer = {
 		});
 		mod.on.hide = cb;
 		mod.show();
+		return mod;
 	},
 	demq: function(d, i) {
 		var surv = survey.core._.cur.survey,
@@ -33,14 +35,22 @@ survey.viewer = {
 		var cur = survey.core._.cur;
 		CT.db.multi(cur.survey.demographics, function(demz) {
 			var qnaire = CT.dom.div(demz.map(survey.viewer.demq));
-			survey.viewer.modal(qnaire, function() {
+			var mod = survey.viewer.modal([
+				qnaire,
+				CT.dom.button("continue", function() {
+					mod.hide();
+				})
+			], function() {
 				// save off profile
 				survey.core.save({
 					modelName: "profile",
-					survey: _.survey.key,
-					person: _.person,
+					survey: cur.survey.key,
+					person: cur.person,
 					demographics: CT.dom.tag("select", qnaire).map(function(dq) {
-						return dq.value();
+						var val = dq.value;
+						if (val == "other")
+							return dq.container.value();
+						return val;
 					})
 				}, survey.viewer.pages);
 			});
