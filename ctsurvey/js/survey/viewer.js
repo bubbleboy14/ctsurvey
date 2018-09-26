@@ -19,10 +19,13 @@ survey.viewer = {
 		mod.on.hide = cb;
 		mod.show();
 	},
-	demq: function(d) {
+	demq: function(d, i) {
+		var surv = survey.core._.cur.survey,
+			demz = core.config.ctsurvey.surveys[surv.title].demographics,
+			dem = demz[i] || {}, other = dem.other, extra = dem.extra || "";
 		return [
-			d.prompt,
-			CT.dom.select(d.options, null, null, null, null, null, true)
+			d.prompt, extra,
+			CT.dom.select(d.options, null, null, null, null, null, other)
 		];
 	},
 	questionnaire: function() {
