@@ -1,5 +1,9 @@
-#ctmain * {
+* {
 	box-sizing: border-box;
+}
+
+#ctheader {
+	height: initial;
 }
 
 .surveys {
