@@ -1,13 +1,10 @@
 survey.viewer = {
 	_: {},
-	init: function(survkey, cb) {
+	init: function(survkey) {
 		CT.db.one(survkey, function(survey) {
 			// load up the survey
 			survey.core._.cur.survey = survey;
-			survey.viewer.register(function() {
-				survey.viewer.questionnaire();
-				cb();
-			});
+			survey.viewer.register(survey.viewer.questionnaire);
 		});
 	},
 	modal: function(content, cb) {
