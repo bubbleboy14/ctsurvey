@@ -52,7 +52,11 @@ survey.viewer = {
 							return dq.container.value();
 						return val;
 					})
-				}, survey.viewer.pages);
+				}, function() {
+					CT.db.get("page", survey.viewer.pages, null, null, null, {
+						survey: cur.survey.key
+					});
+				});
 			});
 		});
 	},
@@ -64,9 +68,17 @@ survey.viewer = {
 			}, true)
 		];
 	},
-	pages: function(with_questions) {
-		// - pages (w/o questions, timed)
-		// - pages (w/ questions)
+	pages: function(pages, with_questions) {
+		// add pictures
+
+
+		if (with_questions) {
+			// add questions
+
+		} else {
+			// set timer to enable button
+			// cycle back after w/ qz
+		}
 	},
 	register: function(cb) {
 		var qf = survey.core.qfield, blurs = core.config.ctsurvey.blurs;
