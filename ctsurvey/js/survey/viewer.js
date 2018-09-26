@@ -13,7 +13,7 @@ survey.viewer = {
 			content: content,
 			noClose: true,
 			slide: {
-				origin: "left"
+				origin: "right"
 			}
 		});
 		mod.on.hide = cb;
@@ -65,8 +65,7 @@ survey.viewer = {
 		}), uzip = qf(null, {
 			id: "uzip",
 			blurs: ["what's your zipcode?", "zipcode please", "zipcode?", "what about your zipcode?"]
-		});
-		(new CT.modal.Modal({
+		}), mod = new CT.modal.Modal({
 			transition: "slide",
 			noClose: true,
 			content: [
@@ -77,6 +76,7 @@ survey.viewer = {
 						z = CT.parse.stripToZip(CT.dom.getFieldValue("uzip"));
 					if (!z)
 						return alert("please enter a valid zipcode");
+					mod.hide();
 					CT.net.post({
 						path: "/_survey",
 						params: {
@@ -91,6 +91,7 @@ survey.viewer = {
 					});
 				})
 			]
-		})).show();
+		})
+		mod.show();
 	}
 };
