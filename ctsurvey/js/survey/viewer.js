@@ -10,8 +10,49 @@ survey.viewer = {
 			});
 		});
 	},
+	modal: function(content, cb) {
+		var mod = new CT.modal.Modal({
+			transition: "slide",
+			content: content,
+			noClose: true,
+			slide: {
+				origin: "left"
+			}
+		});
+		mod.on.hide = cb;
+		mod.show();
+	},
+	demq: function(d) {
+		return [
+			d.prompt,
+			CT.dom.select(d.options, null, null, null, null, null, true)
+		];
+	},
 	questionnaire: function() {
 		// - questionnaire (->Profile)
+		var cur = survey.core._.cur;
+		CT.db.multi(cur.survey.demographics, function(demz) {
+			var qnaire = CT.dom.div(demz.map(survey.viewer.demq));
+			survey.viewer.modal(qnaire, function() {
+				// save off profile
+				survey.core.save({
+					modelName: "profile",
+					survey: _.survey.key,
+					person: _.person,
+					demographics: CT.dom.tag("select", qnaire).map(function(dq) {
+						return dq.value();
+					})
+				}, survey.viewer.pages);
+			});
+		});
+	},
+	question: function(q) {
+		return [
+			q,
+			survey.core.qfield(null, {
+				blurs: ["what do you think?", "please respond thoughtfully", "thoughts?"]
+			}, true)
+		];
 	},
 	pages: function(with_questions) {
 		// - pages (w/o questions, timed)
@@ -47,7 +88,7 @@ survey.viewer = {
 							name: n,
 							email: m
 						}, cb: function(key) {
-							survey.viewer._.person = key;
+							survey.core._.cur.person = key;
 							cb();
 						}
 					});
