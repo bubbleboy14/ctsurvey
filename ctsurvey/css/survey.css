@@ -6,6 +6,10 @@
 	height: initial;
 }
 
+#ctmain {
+	z-index: 100000;
+}
+
 .surveys {
 	float: right;
 	width: 200px;
