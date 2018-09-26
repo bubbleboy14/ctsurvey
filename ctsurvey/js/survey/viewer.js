@@ -71,24 +71,39 @@ survey.viewer = {
 			}), content = with_questions ? [
 				CT.dom.div(iz, "right w200p"),
 				page.questions.map(question)
-			] : iz, butt = CT.dom.button("continue",
+			] : iz, butt = CT.dom.button(with_questions ? "continue" : "wait",
 				null, null, null, !with_questions);
 			var mod = survey.core.modal([
 				content, butt
-			], cb);
+			], cb, true);
 			butt.onclick = mod.hide;
 			mod.show();
 			if (!with_questions) {
 				setTimeout(function() {
 					butt.disabled = false;
+					butt.innerHTML = "continue";
 				}, core.config.ctsurvey.timeout * 1000);
 			}
 		});
 	},
-	pages: function(pages, with_questions) {
+	eachPage: function(pages, cb, with_questions) {
 		var pindex = 0;
-		survey.viewer.page(pages[pindex], function() {
-			
+		var repeater = function() {
+			if (pindex == pages.length)
+				return cb();
+			survey.viewer.page(pages[pindex], function() {
+				pindex += 1;
+				repeater();
+			}, with_questions);
+		};
+		repeater();
+	},
+	pages: function(pages, with_questions) {
+		survey.viewer.eachPage(pages, function() {
+			if (!with_questions)
+				survey.viewer.pages(pages, true);
+			else
+				alert("you did it!");
 		}, with_questions);
 	},
 	register: function(cb) {
