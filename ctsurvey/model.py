@@ -41,7 +41,9 @@ def getzip(code):
     zipcode = ZipCode.query().filter(ZipCode.code == code).get()
     if not zipcode:
         from cantools.web import fetch
-        city, state, county = fetch(ZIPDOMAIN, path="/%s"%(code,), asjson=True)
+        from cantools import config
+        city, state, county = fetch(config.zipdomain,
+            path="/geo?action=zip&code=%s"%(code,), asjson=True)
         zipcode = ZipCode(code=code, city=city, state=state, county=county)
         zipcode.put()
     return zipcode
