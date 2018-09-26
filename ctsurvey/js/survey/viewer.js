@@ -95,7 +95,7 @@ survey.viewer = {
 			transition: "slide",
 			noClose: true,
 			content: [
-				core.config.ctsurvey.profile_prompt,
+				CT.dom.div(core.config.ctsurvey.profile_prompt, "profile_prompt"),
 				uname, umail, uzip, CT.dom.button("continue", function() {
 					var n = CT.dom.getFieldValue("uname"),
 						m = CT.dom.getFieldValue("umail"),
