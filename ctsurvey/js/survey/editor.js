@@ -217,8 +217,10 @@ survey.editor = {
 		], "topbordered topmargined toppadded");
 	},
 	info: function() {
-		var _ = survey.core._, sur = _.cur.survey, qfield = survey.core.qfield, title = qfield(sur.title, {
-			blurs: ["what's the title?", "what do you call this survey?", "survey title?"],
+		var _ = survey.core._, sur = _.cur.survey,
+			blurs = core.config.ctsurvey.blurs;
+		var qfield = survey.core.qfield, title = qfield(sur.title, {
+			blurs: blurs.title,
 			cb: function(val) {
 				sur.title = val;
 				survey.core.save({
@@ -229,7 +231,7 @@ survey.editor = {
 				}, survey.editor.setKey);
 			}
 		}), blurb = qfield(_.cur.survey.blurb, {
-			blurs: ["what's the blurb?", "describe", "tell me more", "gimme some info"],
+			blurs: blurs.blurb,
 			cb: function(val) {
 				if (!sur.title)
 					return alert("don't forget the title!");

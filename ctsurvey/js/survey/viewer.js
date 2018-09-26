@@ -60,7 +60,7 @@ survey.viewer = {
 		return [
 			q,
 			survey.core.qfield(null, {
-				blurs: ["what do you think?", "please respond thoughtfully", "thoughts?"]
+				blurs: core.config.ctsurvey.blurs.answer
 			}, true)
 		];
 	},
@@ -69,20 +69,21 @@ survey.viewer = {
 		// - pages (w/ questions)
 	},
 	register: function(cb) {
-		var qf = survey.core.qfield, uname = qf(null, {
+		var qf = survey.core.qfield, blurs = core.config.ctsurvey.blurs;
+		var uname = qf(null, {
 			id: "uname",
-			blurs: ["what's your name?", "what should we call you?", "name?", "who are you?"]
+			blurs: blurs.name
 		}), umail = qf(null, {
 			id: "umail",
-			blurs: ["what's your email?", "email address?", "electronic mailing address?"]
+			blurs: blurs.email
 		}), uzip = qf(null, {
 			id: "uzip",
-			blurs: ["what's your zipcode?", "zipcode please", "zipcode?", "what about your zipcode?"]
+			blurs: blurs.zip
 		}), mod = new CT.modal.Modal({
 			transition: "slide",
 			noClose: true,
 			content: [
-				"tell us about yourself! name and email are optional. zipcode is required.",
+				core.config.ctsurvey.profile_prompt,
 				uname, umail, uzip, CT.dom.button("continue", function() {
 					var n = CT.dom.getFieldValue("uname"),
 						m = CT.dom.getFieldValue("umail"),

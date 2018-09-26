@@ -13,7 +13,7 @@ survey.core = {
 			},
 			question: {
 				classname: "w1",
-				blurs: ["what's the question?", "question please", "type the question"]
+				blurs: core.config.ctsurvey.blurs.question
 			}
 		},
 		info: CT.dom.div(null, "info"),
