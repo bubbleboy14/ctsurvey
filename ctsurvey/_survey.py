@@ -11,6 +11,6 @@ def response():
         p.name = cgi_get("name", required=False)
         p.email = cgi_get("email", required=False)
         p.put()
-        succeed(p.key)
+        succeed(p.key.urlsafe())
 
 respond(response)
