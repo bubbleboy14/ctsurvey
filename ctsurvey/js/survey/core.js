@@ -92,6 +92,44 @@ survey.core = {
 			], "main")
 		];
 	},
+	register: function(cb) {
+		var uname = survey.core.qfield(null, {
+			id: "uname",
+			blurs: ["what's your name?", "what should we call you?", "name?", "who are you?"]
+		}), umail = survey.core.qfield(null, {
+			id: "umail",
+			blurs: ["what's your email?", "email address?", "electronic mailing address?"]
+		}), uzip = survey.core.qfield(null, {
+			id: "uzip",
+			blurs: ["what's your zipcode?", "zipcode please", "zipcode?", "what about your zipcode?"]
+		});
+		(new CT.modal.Modal({
+			transition: "slide",
+			noClose: true,
+			content: [
+				"tell us about yourself! name and email are optional. zipcode is required.",
+				uname, umail, uzip, CT.dom.button("continue", function() {
+					var n = CT.dom.getFieldValue("uname"),
+						m = CT.dom.getFieldValue("umail"),
+						z = CT.parse.stripToZip(CT.dom.getFieldValue("uzip"));
+					if (!z)
+						return alert("please enter a valid zipcode");
+					CT.net.post({
+						path: "/_survey",
+						params: {
+							action: "register",
+							zip: z,
+							name: n,
+							email: m
+						}, cb: function(key) {
+							survey.core._.person = key;
+							cb();
+						}
+					});
+				})
+			]
+		})).show();
+	},
 	save: function(obj, cb) {
 		CT.net.post({
 			path: "/_db",
