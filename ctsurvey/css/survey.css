@@ -3,11 +3,8 @@
 }
 
 #ctheader {
+	z-index: -1;
 	height: initial;
-}
-
-#ctmain {
-	z-index: 100000;
 }
 
 .surveys {
