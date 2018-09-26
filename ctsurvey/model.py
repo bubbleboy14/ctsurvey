@@ -43,7 +43,7 @@ def getzip(code):
         from cantools.web import fetch
         from cantools import config
         city, state, county = fetch(config.zipdomain,
-            path="/geo?action=zip&code=%s"%(code,), asjson=True)
+            path="/geo?action=zip&code=%s"%(code,), ctjson=True)
         zipcode = ZipCode(code=code, city=city, state=state, county=county)
         zipcode.put()
     return zipcode
