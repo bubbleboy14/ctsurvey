@@ -9,12 +9,7 @@ if (!hash)
 
 CT.onload(function() {
 	CT.initCore();
-	CT.db.one(hash, function(survey) {
-		survey.core.register(function() {
-			// load up the survey
-			// - questionnaire (->Profile)
-			// - pages (w/o questions, timed)
-			// - pages (w/ questions)
-		});
+	survey.viewer.init(hash, function() {
+		// ???
 	});
 });
