@@ -55,22 +55,35 @@ survey.viewer = {
 			});
 		});
 	},
-	question: function(q) {
+	question: function(q, i) {
+		var cur = survey.core._.cur, answer = {
+			modelName: "answer",
+			person: cur.person,
+			page: cur.page.key,
+			question: i
+		};
 		return [
 			q,
 			survey.core.qfield(null, {
-				blurs: core.config.ctsurvey.blurs.answer
+				blurs: core.config.ctsurvey.blurs.answer,
+				cb: function(val) {
+					answer.response = val;
+					survey.core.save(answer, function(adata) {
+						answer.key = adata.key;
+					});
+				}
 			}, true)
 		];
 	},
 	page: function(page, cb, with_questions) {
 		// add pictures
+		survey.core._.cur.page = page;
 		CT.db.multi(page.images, function(imgz) {
 			var iz = imgz.map(function(img) {
 				return CT.dom.img(img.image);
 			}), content = with_questions ? [
 				CT.dom.div(iz, "right w200p"),
-				page.questions.map(question)
+				page.questions.map(survey.viewer.question)
 			] : iz, butt = CT.dom.button(with_questions ? "continue" : "wait",
 				null, null, null, !with_questions);
 			var mod = survey.core.modal([
