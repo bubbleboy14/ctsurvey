@@ -2,7 +2,6 @@ survey.viewer = {
 	_: {},
 	init: function(survkey) {
 		CT.db.one(survkey, function(surv) {
-			// load up the survey
 			survey.core._.cur.survey = surv;
 			survey.core._.pw = core.config.ctsurvey.apikey;
 			survey.viewer.register(survey.viewer.questionnaire);
@@ -18,7 +17,6 @@ survey.viewer = {
 		];
 	},
 	questionnaire: function() {
-		// - questionnaire (->Profile)
 		var cur = survey.core._.cur;
 		CT.db.multi(cur.survey.demographics, function(demz) {
 			var qnaire = CT.dom.div(demz.map(survey.viewer.demq));
@@ -28,7 +26,6 @@ survey.viewer = {
 					mod.hide();
 				})
 			], function() {
-				// save off profile
 				survey.core.save({
 					modelName: "profile",
 					survey: cur.survey.key,
@@ -76,27 +73,42 @@ survey.viewer = {
 		];
 	},
 	page: function(page, cb, with_questions) {
-		// add pictures
 		survey.core._.cur.page = page;
 		CT.db.multi(page.images, function(imgz) {
-			var iz = imgz.map(function(img) {
-				return CT.dom.img(img.image);
-			}), content = with_questions ? [
-				CT.dom.div(iz, "right w200p"),
-				page.questions.map(survey.viewer.question)
-			] : iz, butt = CT.dom.button(with_questions ? "continue" : "wait",
-				null, null, null, !with_questions);
-			var mod = survey.core.modal([
-				content, butt
-			], cb, true);
-			butt.onclick = mod.hide;
-			mod.show();
-			if (!with_questions) {
+			var butt, content;
+			if (with_questions) {
+				butt = CT.dom.button("continue", null, "automarg block");
+				content = CT.dom.div([
+					CT.dom.div(imgz.map(function(img) {
+						return CT.dom.img(img.image);
+					}), "right w200p"),
+					CT.dom.node({
+						style: { width: "calc(100% - 220px)" },
+						content: page.questions.map(survey.viewer.question),
+					})
+				], "padded");
+			}
+			else {
+				butt = CT.dom.button("wait", null, "abs ctr mosthigh", null, true);
+				content = CT.dom.div(null, "full");
+				var interval = core.config.ctsurvey.timeout * 1000;
+				new CT.slider.Slider({
+					parent: content,
+					keys: false,
+					navButtons: false,
+					autoSlideInterval: interval,
+					frames: imgz.map(function(img) {
+						return img.image;
+					})
+				});
 				setTimeout(function() {
 					butt.disabled = false;
 					butt.innerHTML = "continue";
-				}, core.config.ctsurvey.timeout * 1000);
+				}, interval * imgz.length);
 			}
+			var mod = survey.core.modal([content, butt], cb, true);
+			butt.onclick = mod.hide;
+			mod.show();
 		});
 	},
 	eachPage: function(pages, cb, with_questions) {
