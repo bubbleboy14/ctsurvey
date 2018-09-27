@@ -26,7 +26,7 @@ survey.core = {
 	},
 	modal: function(content, cb, lightbox) {
 		var mod = new CT.modal[lightbox ? "LightBox" : "Modal"]({
-			transition: "slide",
+			transition: lightbox ? "fade" : "slide",
 			content: content,
 			noClose: true,
 			slide: {
