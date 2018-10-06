@@ -76,6 +76,7 @@ survey.viewer = {
 		];
 	},
 	page: function(page, cb, with_questions) {
+		var surv = survey.core._.cur.survey;
 		survey.core._.cur.page = page;
 		CT.db.multi(page.images, function(imgz) {
 			var butt, content;
@@ -87,7 +88,10 @@ survey.viewer = {
 					}), "right w1-4 h1 scrolly"),
 					CT.dom.node({
 						style: { width: "calc(100% - 26%)" },
-						content: page.questions.map(survey.viewer.question),
+						content: [
+							surv.instructions,
+							page.questions.map(survey.viewer.question)
+						]
 					})
 				], "h1 padded");
 			}
