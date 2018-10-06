@@ -29,6 +29,7 @@ survey.core = {
 			transition: lightbox ? "fade" : "slide",
 			content: content,
 			noClose: true,
+			outerClose: false,
 			slide: {
 				origin: "right"
 			}
