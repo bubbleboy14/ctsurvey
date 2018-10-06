@@ -109,11 +109,11 @@ survey.viewer = {
 					butt.innerHTML = "continue";
 					CT.trans.rotate(butt, { degrees: 720 });
 					CT.trans.resize(butt, {
-						width: "180px",
-						height: "53px",
+						width: "130px",
+						height: "40px",
 						duration: 800,
 						cb: function() {
-							butt.style.fontSize = "200%";
+							butt.style.fontSize = "120%";
 							butt.classList.add("hoverglow");
 						}
 					});
