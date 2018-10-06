@@ -107,10 +107,9 @@ survey.viewer = {
 				setTimeout(function() {
 					butt.disabled = false;
 					butt.innerHTML = "continue";
-					CT.trans.wobble(butt, { radius: -50 });
 					CT.trans.rotate(butt, { degrees: 720 });
 					CT.trans.resize(butt, {
-						width: "131px",
+						width: "180px",
 						height: "53px",
 						duration: 800,
 						cb: function() {
