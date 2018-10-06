@@ -4,6 +4,17 @@ survey.viewer = {
 		CT.db.one(survkey, function(surv) {
 			survey.core._.cur.survey = surv;
 			survey.core._.pw = core.config.ctsurvey.apikey;
+			survey.viewer.intro();
+		});
+	},
+	intro: function() {
+		var cur = survey.core._.cur, intro = survey.core.modal([
+			CT.dom.div(cur.survey.title, "title"),
+			CT.dom.div(cur.survey.blurb, "blurb"),
+			CT.dom.button("continue", function() {
+				intro.hide();
+			})
+		], function() {
 			survey.viewer.register(survey.viewer.questionnaire);
 		});
 	},
@@ -37,16 +48,8 @@ survey.viewer = {
 						return val;
 					})
 				}, function() {
-					var intro = survey.core.modal([
-						CT.dom.div(cur.survey.title, "title"),
-						CT.dom.div(cur.survey.blurb, "blurb"),
-						CT.dom.button("continue", function() {
-							intro.hide();
-						})
-					], function() {
-						CT.db.get("page", survey.viewer.pages, null, null, null, {
-							survey: cur.survey.key
-						});
+					CT.db.get("page", survey.viewer.pages, null, null, null, {
+						survey: cur.survey.key
 					});
 				});
 			});
