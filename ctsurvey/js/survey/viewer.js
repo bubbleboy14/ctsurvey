@@ -89,7 +89,7 @@ survey.viewer = {
 					CT.dom.node({
 						style: { width: "calc(100% - 26%)" },
 						content: [
-							surv.instructions,
+							CT.dom.div(surv.instructions, "instructions"),
 							page.questions.map(survey.viewer.question)
 						]
 					})
