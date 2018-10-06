@@ -115,6 +115,7 @@ survey.viewer = {
 						duration: 800,
 						cb: function() {
 							butt.style.fontSize = "200%";
+							butt.classList.add("hoverglow");
 						}
 					});
 				}, interval * imgz.length);
