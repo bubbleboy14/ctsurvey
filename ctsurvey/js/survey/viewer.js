@@ -107,6 +107,7 @@ survey.viewer = {
 				setTimeout(function() {
 					butt.disabled = false;
 					butt.innerHTML = "continue";
+					CT.trans.wobble(butt, { radius: -50 });
 				}, interval * imgz.length);
 			}
 			var mod = survey.core.modal(CT.dom.div([content, butt], "h1"), cb, true);
