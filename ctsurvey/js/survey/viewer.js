@@ -108,6 +108,15 @@ survey.viewer = {
 					butt.disabled = false;
 					butt.innerHTML = "continue";
 					CT.trans.wobble(butt, { radius: -50 });
+					CT.trans.rotate(butt, { degrees: 720 });
+					CT.trans.resize(butt, {
+						width: "131px",
+						height: "53px",
+						duration: 800,
+						cb: function() {
+							butt.style.fontSize = "200%";
+						}
+					});
 				}, interval * imgz.length);
 			}
 			var mod = survey.core.modal(CT.dom.div([content, butt], "h1"), cb, true);
