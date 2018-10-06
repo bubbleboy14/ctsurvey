@@ -81,12 +81,12 @@ survey.viewer = {
 				content = CT.dom.div([
 					CT.dom.div(imgz.map(function(img) {
 						return CT.dom.img(img.image);
-					}), "right w1-4"),
+					}), "right w1-4 h1 scrolly"),
 					CT.dom.node({
 						style: { width: "calc(100% - 26%)" },
 						content: page.questions.map(survey.viewer.question),
 					})
-				], "padded");
+				], "h1 padded");
 			}
 			else {
 				butt = CT.dom.button("wait", null, "abs ctr mosthigh", null, true);
@@ -106,7 +106,7 @@ survey.viewer = {
 					butt.innerHTML = "continue";
 				}, interval * imgz.length);
 			}
-			var mod = survey.core.modal([content, butt], cb, true);
+			var mod = survey.core.modal(CT.dom.div([content, butt], "h1"), cb, true);
 			butt.onclick = mod.hide;
 			mod.show();
 		});
