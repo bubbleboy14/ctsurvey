@@ -10,6 +10,7 @@ class Survey(db.TimeStampedBase):
     demographics = db.ForeignKey(kind=Demographic, repeated=True)
     title = db.String()
     blurb = db.Text()
+    instructions = db.Text()
 
 class Image(db.TimeStampedBase):
     image = db.Binary()
