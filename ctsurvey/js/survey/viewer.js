@@ -85,9 +85,9 @@ survey.viewer = {
 				content = CT.dom.div([
 					CT.dom.div(imgz.map(function(img) {
 						return CT.dom.img(img.image);
-					}), "right w1-4 h1 scrolly"),
+					}), "right w3-10 h1 scrolly"),
 					CT.dom.node({
-						style: { width: "calc(100% - 26%)" },
+						style: { width: "69%" },
 						content: [
 							CT.dom.div(surv.instructions, "instructions"),
 							page.questions.map(survey.viewer.question)
