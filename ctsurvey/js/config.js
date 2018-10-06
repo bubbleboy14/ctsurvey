@@ -4,6 +4,7 @@
 	"blurs": {
 		"title": ["what's the title?", "what do you call this survey?", "survey title?"],
 		"blurb": ["what's the blurb?", "describe", "tell me more", "gimme some info"],
+		"instructions": ["instructions", "add instructions here"],
 		"question": ["what's the question?", "question please", "type the question"],
 		"answer": ["what do you think?", "please respond thoughtfully", "thoughts?"],
 		"name": ["what's your name?", "what should we call you?", "name?", "who are you?"],
