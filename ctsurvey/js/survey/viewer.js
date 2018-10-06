@@ -80,7 +80,7 @@ survey.viewer = {
 		CT.db.multi(page.images, function(imgz) {
 			var butt, content;
 			if (with_questions) {
-				butt = CT.dom.button("continue", null, "automarg block");
+				butt = CT.dom.button("continue", null, "automarg block up30");
 				content = CT.dom.div([
 					CT.dom.div(imgz.map(function(img) {
 						return CT.dom.img(img.image);
