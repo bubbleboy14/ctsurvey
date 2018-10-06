@@ -63,7 +63,7 @@ survey.viewer = {
 			question: i
 		};
 		return [
-			q,
+			CT.dom.div(q, "question"),
 			survey.core.qfield(null, {
 				blurs: core.config.ctsurvey.blurs.answer,
 				cb: function(val) {
