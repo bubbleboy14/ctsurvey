@@ -239,10 +239,21 @@ survey.editor = {
 				survey.core.save({
 					key: sur.key,
 					blurb: val
-				}, survey.editor.setKey);
+				});
+			}
+		}, true), instructions = qfield(_.cur.survey.instructions, {
+			blurs: blurs.instructions,
+			cb: function(val) {
+				if (!sur.title)
+					return alert("don't forget the title!");
+				sur.instructions = val;
+				survey.core.save({
+					key: sur.key,
+					instructions: val
+				});
 			}
 		}, true);
-		CT.dom.setContent(_.info, [title, blurb]);
+		CT.dom.setContent(_.info, [title, blurb, instructions]);
 		CT.db.multi(sur.demographics, function(dz) {
 			CT.dom.setContent(_.demos, [
 				CT.dom.button("new demographic question", function() {
