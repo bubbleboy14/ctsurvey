@@ -40,10 +40,6 @@
 	padding: 0 32px;
 }
 
-.page {
-	clear: both;
-}
-
 .page .images:before {
 	content: "images";
 }
