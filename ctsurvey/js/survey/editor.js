@@ -48,6 +48,7 @@ survey.editor = {
 		}));
 		CT.dom.setContent(editors.page, [
 			_.newpage,
+			_.getanswers,
 			_.pages,
 			CT.dom.div([
 				_.images,
@@ -59,6 +60,7 @@ survey.editor = {
 			_.demos
 		]);
 		_.newpage.onclick = survey.editor.newPage;
+		_.getanswers.onclick = survey.editor.getAnswers;
 		newsurv.onclick();
 		return [
 			_.surveys,
@@ -126,6 +128,7 @@ survey.editor = {
 								ctfile.upload("/_db", function(url) {
 									idata.image = url;
 									CT.dom.show(_.newpage);
+									CT.dom.show(_.getanswers);
 									inode.appendChild(survey.editor.img(idata));
 								}, {
 									action: "blob",
@@ -139,6 +142,28 @@ survey.editor = {
 			]);
 		});
 	},
+	getAnswers: function() {
+		var cur = survey.core._.cur,
+			page = cur.page, surv = cur.survey;
+		CT.db.get("answer", function(answers) {
+			var arowz = [page.questions.slice()], az = {};
+			answers.forEach(function(answer) {
+				if (!(answer.person in az)) {
+					az[answer.person] = [];
+					arowz.push(az[answer.person]);
+				}
+				az[answer.person][answer.question] = answer.response;
+			});
+			var s = arowz.map(function(arow) {
+				// TODO: strip out line breaks at input stage!!!
+				return arow.join("\t").replace(/\n/g, "");
+			}).join("\n");
+			survey.core.modal(CT.file.make(s).download(surv.title + " - Page "
+				+ (cur.pages.indexOf(page) + 1) + ".tsv"), null, null, true);
+		}, null, null, null, {
+			page: page.key
+		});
+	},
 	page: function(page) {
 		var _ = survey.core._, qfield = survey.core.qfield, newq = qfield("", {
 			cb: function(val) {
@@ -146,6 +171,7 @@ survey.editor = {
 				qz.appendChild(qfield(val, page.questions.length, true));
 				page.questions[page.questions.length] = val;
 				CT.dom.show(_.newpage);
+				CT.dom.show(_.getanswers);
 				survey.core.save({
 					key: page.key,
 					modelName: "page",
@@ -170,6 +196,7 @@ survey.editor = {
 		pages.push(page);
 		CT.dom.addContent(_.pages.firstChild, slink);
 		CT.dom.hide(_.newpage);
+		CT.dom.hide(_.getanswers);
 		viewPage();
 	},
 	pages: function(pages) {
@@ -188,6 +215,7 @@ survey.editor = {
 		}));
 		survey.editor.page(pages[0]);
 		CT.dom.show(_.newpage);
+		CT.dom.show(_.getanswers);
 	},
 	demo: function(dem) {
 		var doptions = CT.dom.fieldList(dem.options);
