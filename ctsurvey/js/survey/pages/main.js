@@ -10,5 +10,6 @@ if (!hash)
 
 CT.onload(function() {
 	CT.initCore();
+	CT.dom.remove("ctll");
 	survey.viewer.init(hash);
 });
