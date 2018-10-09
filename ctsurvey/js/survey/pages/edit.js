@@ -11,7 +11,19 @@ CT.onload(function() {
 		style: "password",
 		noClose: true,
 		cb: function(pw) {
-			survey.editor.init(pw);
+			CT.net.post({
+				path: "/_db",
+				params: {
+					action: "credcheck",
+					pw: pw
+				},
+				cb: function() {
+					survey.editor.init(pw);
+				},
+				eb: function() {
+					location = "/";
+				}
+			})
 		}
 	})).show();
 });
