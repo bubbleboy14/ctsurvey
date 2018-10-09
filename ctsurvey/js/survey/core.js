@@ -70,7 +70,8 @@ survey.core = {
 		}
 		return CT.dom.smartField(CT.merge({
 			isTA: ta,
-			value: val
+			value: val,
+			noBreak: true
 		}, opts, survey.core._.blanks.question));
 	},
 	setActive: function(slink, section) {
