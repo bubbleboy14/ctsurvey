@@ -25,6 +25,9 @@ survey.core = {
 		newpage: CT.dom.button("new page", null, "right hidden"),
 		getanswers: CT.dom.button("get answers", null, "right hidden")
 	},
+	zip: function(z) {
+		return [z.state, z.county, z.city, z.code].join(", ");
+	},
 	modal: function(content, cb, lightbox, closeonclick) {
 		var mod = new CT.modal[lightbox ? "LightBox" : "Modal"]({
 			transition: lightbox ? "fade" : "slide",
