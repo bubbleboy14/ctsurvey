@@ -124,7 +124,15 @@ survey.viewer = {
 				}, interval * imgz.length);
 			}
 			var mod = survey.core.modal(CT.dom.div([content, butt], "h1"), cb, true);
-			butt.onclick = mod.hide;
+			butt.onclick = function() {
+				if (with_questions) {
+					var i, iz = CT.dom.tag("textarea", content);
+					for (i = 0; i < iz.length; i++)
+						if (!CT.dom.getFieldValue(iz[i]))
+							return alert(core.config.ctsurvey.question_prompt);
+				}
+				mod.hide();
+			};
 			mod.show();
 		});
 	},
