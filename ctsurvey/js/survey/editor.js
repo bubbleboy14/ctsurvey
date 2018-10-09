@@ -210,7 +210,7 @@ survey.editor = {
 					rmbutt.parentNode.remove();
 				});
 			});
-			return [qfield(q, { classname: "w9-10" }), rmbutt];
+			return [qfield(q, { cb: i, classname: "w9-10" }), rmbutt];
 		}));
 		_.cur.page = page;
 		CT.dom.setContent(_.questions, [qz, newq]);
