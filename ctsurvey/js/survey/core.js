@@ -25,6 +25,18 @@ survey.core = {
 		newpage: CT.dom.button("new page", null, "right hidden"),
 		getanswers: CT.dom.button("get answers", null, "right hidden")
 	},
+	hash: function() {
+		var hash = location.hash.slice(1);
+		if (!hash) {
+			if (core.config.ctsurvey.default_survey) {
+				hash = CT.db.get("survey", null, null, null, null, {
+					title: core.config.ctsurvey.default_survey
+				}, true)[0].key;
+			} else
+				location = "/"; // whatever, kick em back
+		}
+		return hash;
+	},
 	zip: function(z) {
 		return [z.state, z.county, z.city, z.code].join(", ");
 	},
