@@ -150,12 +150,10 @@ survey.editor = {
 				return a.person;
 			}), function(peeps) {
 				peeps.forEach(function(p) { // faster way to do this?
-					CT.db.get("profile", function(prof) {
-						p.profile = prof; // heh, hacky
-					}, null, null, null, {
+					p.profile = CT.db.get("profile", null, null, null, null, {
 						survey: surv.key,
 						person: p.key
-					});
+					}, true)[0];
 				});
 				CT.db.multi(peeps.map(function(p) {
 					return p.zipcode;
