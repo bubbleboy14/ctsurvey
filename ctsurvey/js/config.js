@@ -11,5 +11,6 @@
 		"email": ["what's your email?", "email address?", "electronic mailing address?"],
 		"zip": ["what's your zipcode?", "zipcode please", "zipcode?", "what about your zipcode?"]
 	},
+	"question_prompt": "please answer the questions",
 	"profile_prompt": "tell us about yourself! name and email are optional. zipcode is required."
 }
