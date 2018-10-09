@@ -70,17 +70,17 @@ survey.core = {
 		});
 	},
 	qfield: function(val, opts, ta) {
-		if (typeof opts == "number") {
-			var num = opts;
-			opts = {
-				cb: function(val) {
-					var page = survey.core._.cur.page;
-					page.questions[num] = val;
-					survey.core.save({
-						key: page.key,
-						questions: page.questions
-					});
-				}
+		if (typeof opts == "number")
+			opts = { cb: opts };
+		if (typeof opts.cb == "number") {
+			var num = opts.cb;
+			opts.cb = function(val) {
+				var page = survey.core._.cur.page;
+				page.questions[num] = val;
+				survey.core.save({
+					key: page.key,
+					questions: page.questions
+				});
 			};
 		}
 		return CT.dom.smartField(CT.merge({
