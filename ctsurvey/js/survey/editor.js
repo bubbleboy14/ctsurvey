@@ -156,7 +156,7 @@ survey.editor = {
 			});
 			var s = arowz.map(function(arow) {
 				// TODO: strip out line breaks at input stage!!!
-				return arow.join("\t").replace(/\n/g, "");
+				return arow.join("\t");
 			}).join("\n");
 			survey.core.modal(CT.file.make(s).download(surv.title + " - Page "
 				+ (cur.pages.indexOf(page) + 1) + ".tsv"), null, null, true);
