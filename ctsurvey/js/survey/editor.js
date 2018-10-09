@@ -146,20 +146,28 @@ survey.editor = {
 		var cur = survey.core._.cur,
 			page = cur.page, surv = cur.survey;
 		CT.db.get("answer", function(answers) {
-			var arowz = [page.questions.slice()], az = {};
-			answers.forEach(function(answer) {
-				if (!(answer.person in az)) {
-					az[answer.person] = [];
-					arowz.push(az[answer.person]);
-				}
-				az[answer.person][answer.question] = answer.response;
+			CT.db.multi(answers.map(function(a) {
+				return a.person;
+			}), function(peeps) {
+				CT.db.multi(peeps.map(function(p) {
+					return p.zipcode;
+				}), function() {
+					var arowz = [["location", "name", "email"].concat(page.questions)], az = {};
+					answers.forEach(function(answer) {
+						if (!(answer.person in az)) {
+							var p = CT.data.get(answer.person),
+								z = CT.data.get(p.zipcode);
+							az[answer.person] = [survey.core.zip(z), p.name, p.email];
+							arowz.push(az[answer.person]);
+						}
+						az[answer.person][answer.question + 3] = answer.response;
+					});
+					survey.core.modal(CT.file.make(arowz.map(function(arow) {
+						return arow.join("\t");
+					}).join("\n")).download(surv.title + " - Page "
+						+ (cur.pages.indexOf(page) + 1) + ".tsv"), null, null, true);
+				});
 			});
-			var s = arowz.map(function(arow) {
-				// TODO: strip out line breaks at input stage!!!
-				return arow.join("\t");
-			}).join("\n");
-			survey.core.modal(CT.file.make(s).download(surv.title + " - Page "
-				+ (cur.pages.indexOf(page) + 1) + ".tsv"), null, null, true);
 		}, null, null, null, {
 			page: page.key
 		});
