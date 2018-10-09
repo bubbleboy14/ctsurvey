@@ -202,7 +202,18 @@ survey.editor = {
 					page.key = data.key;
 				});
 			}
-		}, true), qz = CT.dom.div(page.questions.map(qfield));
+		}, true), pqz = page.questions, qz = CT.dom.div(pqz.map(function(q, i) {
+			var rmbutt = CT.dom.button("X", function() {
+				pqz.splice(pqz.indexOf(q), 1);
+				survey.core.save({
+					key: page.key,
+					questions: pqz
+				}, function() {
+					rmbutt.parentNode.remove();
+				});
+			});
+			return [qfield(q, { classname: "w9-10" }), rmbutt];
+		}));
 		_.cur.page = page;
 		CT.dom.setContent(_.questions, [qz, newq]);
 		survey.editor.images();
