@@ -149,23 +149,36 @@ survey.editor = {
 			CT.db.multi(answers.map(function(a) {
 				return a.person;
 			}), function(peeps) {
+				peeps.forEach(function(p) { // faster way to do this?
+					CT.db.get("profile", function(prof) {
+						p.profile = prof; // heh, hacky
+					}, null, null, null, {
+						survey: surv.key,
+						person: p.key
+					});
+				});
 				CT.db.multi(peeps.map(function(p) {
 					return p.zipcode;
 				}), function() {
-					var arowz = [["location", "name", "email"].concat(page.questions)], az = {};
-					answers.forEach(function(answer) {
-						if (!(answer.person in az)) {
-							var p = CT.data.get(answer.person),
-								z = CT.data.get(p.zipcode);
-							az[answer.person] = [survey.core.zip(z), p.name, p.email];
-							arowz.push(az[answer.person]);
-						}
-						az[answer.person][answer.question + 3] = answer.response;
+					CT.db.multi(surv.demographics, function(demz) {
+						var arowz = [["location", "name", "email"].concat(demz.map(function(d) {
+							return d.prompt;
+						})).concat(page.questions)], az = {};
+						answers.forEach(function(answer) {
+							if (!(answer.person in az)) {
+								var p = CT.data.get(answer.person),
+									z = CT.data.get(p.zipcode),
+									d = p.profile.demographics;
+								az[answer.person] = [survey.core.zip(z), p.name, p.email].concat(d);
+								arowz.push(az[answer.person]);
+							}
+							az[answer.person][answer.question + 3 + demz.length] = answer.response;
+						});
+						survey.core.modal(CT.file.make(arowz.map(function(arow) {
+							return arow.join("\t");
+						}).join("\n")).download(surv.title + " - Page "
+							+ (cur.pages.indexOf(page) + 1) + ".tsv"), null, null, true);
 					});
-					survey.core.modal(CT.file.make(arowz.map(function(arow) {
-						return arow.join("\t");
-					}).join("\n")).download(surv.title + " - Page "
-						+ (cur.pages.indexOf(page) + 1) + ".tsv"), null, null, true);
 				});
 			});
 		}, null, null, null, {
