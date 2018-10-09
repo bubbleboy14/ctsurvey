@@ -22,9 +22,10 @@ survey.core = {
 		images: CT.dom.div(null, "images"),
 		surveys: CT.dom.div(null, "surveys"),
 		questions: CT.dom.div(null, "questions"),
-		newpage: CT.dom.button("new page", null, "right hidden")
+		newpage: CT.dom.button("new page", null, "right hidden"),
+		getanswers: CT.dom.button("get answers", null, "right hidden")
 	},
-	modal: function(content, cb, lightbox) {
+	modal: function(content, cb, lightbox, closeonclick) {
 		var mod = new CT.modal[lightbox ? "LightBox" : "Modal"]({
 			transition: lightbox ? "fade" : "slide",
 			content: content,
@@ -32,9 +33,13 @@ survey.core = {
 			outerClose: false,
 			slide: {
 				origin: "right"
+			},
+			onclick: closeonclick && function() {
+				mod.hide();
 			}
 		});
-		mod.on.hide = cb;
+		if (cb)
+			mod.on.hide = cb;
 		mod.show();
 		return mod;
 	},
