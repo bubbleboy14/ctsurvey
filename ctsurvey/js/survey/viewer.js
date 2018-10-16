@@ -126,10 +126,14 @@ survey.viewer = {
 			var mod = survey.core.modal(CT.dom.div([content, butt], "h1"), cb, true);
 			butt.onclick = function() {
 				if (with_questions) {
-					var i, iz = CT.dom.tag("textarea", content);
-					for (i = 0; i < iz.length; i++)
-						if (!CT.dom.getFieldValue(iz[i]))
+					var i, f, v, iz = CT.dom.tag("textarea", content);
+					for (i = 0; i < iz.length; i++) {
+						f = iz[i];
+						v = CT.dom.getFieldValue(f);
+						if (!v)
 							return alert(core.config.ctsurvey.question_prompt);
+						f._submit(v);
+					}
 				}
 				mod.hide();
 			};
