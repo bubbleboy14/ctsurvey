@@ -83,11 +83,13 @@ survey.core = {
 				});
 			};
 		}
-		return CT.dom.smartField(CT.merge({
+		var f = CT.dom.smartField(CT.merge({
 			isTA: ta,
 			value: val,
 			noBreak: true
 		}, opts, survey.core._.blanks.question));
+		f._submit = opts.cb;
+		return f;
 	},
 	setActive: function(slink, section) {
 		var _ = survey.core._, cur = CT.dom.className("active", section || _.surveys);
