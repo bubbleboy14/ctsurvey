@@ -87,6 +87,7 @@ survey.viewer = {
 						return CT.dom.img(img.image);
 					}), "right w3-10 h1 scrolly"),
 					CT.dom.node({
+						classname: "h9-10 scrolly",
 						style: { width: "69%" },
 						content: [
 							CT.dom.div(surv.instructions, "instructions"),
