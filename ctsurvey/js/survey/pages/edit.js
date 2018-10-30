@@ -3,6 +3,7 @@ CT.require("core");
 CT.require("user.core");
 CT.require("survey.core");
 CT.require("survey.editor");
+CT.db.setLimit(500);
 
 CT.onload(function() {
 	CT.initCore();
